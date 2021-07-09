@@ -40,3 +40,8 @@ variable "storageaccount_access_tier" {
   description = "storage account access tier"
   default = "hot"
 }
+
+variable "min_tls_version" {
+  description = "storage account TLS version"
+  default = "TLS1_2"
+}

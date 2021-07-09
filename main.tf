@@ -28,6 +28,7 @@ resource "azurerm_storage_account" "gen2_datalake" {
   account_replication_type = var.storageaccount_replication_type
   account_kind             = var.storageaccount_kind
   is_hns_enabled           = var.storageaccount_is_hns_enabled
+  min_tls_version          = var.min_tls_version
 
   access_tier              = var.storageaccount_access_tier
   network_rules {
