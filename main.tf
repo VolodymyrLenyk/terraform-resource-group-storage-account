@@ -35,3 +35,16 @@ resource "azurerm_storage_account" "gen2_datalake" {
     default_action         = "Allow"
   }
 }
+
+resource "azurerm_storage_data_lake_gen2_filesystem" "gen2_datalake_containers" {
+  count              = length(var.datalake_resource_config["datalake_container_list"])
+  name               = var.datalake_resource_config["datalake_container_list"][count.index]
+  storage_account_id = azurerm_storage_account.gen2_datalake.id
+
+  ace {
+    scope       = "access"
+    type        = "user"
+    id          = var.datalake_permissions["rw_rights_obj_id"]
+    permissions = "rwx"
+  }
+}

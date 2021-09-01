@@ -38,10 +38,28 @@ variable "storageaccount_is_hns_enabled" {
 
 variable "storageaccount_access_tier" {
   description = "storage account access tier"
-  default = "hot"
+  default = "Hot"
 }
 
 variable "min_tls_version" {
   description = "storage account TLS version"
   default = "TLS1_2"
+}
+
+variable "datalake_resource_config" {
+  description = "Resource config details"
+  type = object(
+    {
+      datalake_container_list   = list(string)
+    }
+  )
+}
+
+variable "datalake_permissions" {
+  description = "Datalake permissions"
+  type = object(
+    {
+      rw_rights_obj_id = string
+    }
+  )
 }
