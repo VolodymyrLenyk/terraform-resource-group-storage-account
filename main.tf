@@ -43,7 +43,13 @@ resource "azurerm_storage_data_lake_gen2_filesystem" "gen2_datalake_containers" 
 
   ace {
     scope       = "access"
-    type        = "user"
+    type        = "group"
+    id          = var.datalake_permissions["rw_rights_obj_id"]
+    permissions = "rwx"
+  }
+  ace {
+    scope       = "default"
+    type        = "group"
     id          = var.datalake_permissions["rw_rights_obj_id"]
     permissions = "rwx"
   }
