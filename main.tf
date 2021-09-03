@@ -54,3 +54,49 @@ resource "azurerm_storage_data_lake_gen2_filesystem" "gen2_datalake_containers" 
     permissions = "rwx"
   }
 }
+
+resource "azurerm_storage_management_policy" "data_lifecycle_datalake" {
+  storage_account_id = azurerm_storage_account.gen2_datalake.id
+
+  rule {
+    name    = "archive-raw-data-lifecycle-datalake"
+    enabled = var.datalake_resource_config["enable_archive_raw_data_lifecycle_datalake"]
+    filters {
+      prefix_match = var.datalake_resource_config["raw_container_prefix_archive"]
+      blob_types   = ["blockBlob"]
+    }
+    actions {
+      base_blob {
+        tier_to_archive_after_days_since_modification_greater_than = var.datalake_resource_config["days_after_to_archive_raw_data"]
+      }
+    }
+  }
+
+  rule {
+    name    = "delete-raw-data-lifecycle-datalake"
+    enabled = var.datalake_resource_config["enable_delete_raw_data_lifecycle_datalake"]
+    filters {
+      prefix_match = var.datalake_resource_config["raw_container_prefix_delete"]
+      blob_types   = ["blockBlob"]
+    }
+    actions {
+      base_blob {
+        delete_after_days_since_modification_greater_than = var.datalake_resource_config["days_after_to_delete_raw_data"]
+      }
+    }
+  }
+
+  rule {
+    name    = "cool-refined-data-lifecycle-datalake"
+    enabled = var.datalake_resource_config["enable_cool_refined_data_lifecycle_datalake"]
+    filters {
+      prefix_match = var.datalake_resource_config["refined_container_prefix_cool"]
+      blob_types   = ["blockBlob"]
+    }
+    actions {
+      base_blob {
+        tier_to_cool_after_days_since_modification_greater_than = var.datalake_resource_config["days_after_to_cool_refined_data"]
+      }
+    }
+  }
+}

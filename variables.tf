@@ -51,6 +51,15 @@ variable "datalake_resource_config" {
   type = object(
     {
       datalake_container_list   = list(string)
+      enable_archive_raw_data_lifecycle_datalake  = bool
+      enable_delete_raw_data_lifecycle_datalake = bool
+      enable_cool_refined_data_lifecycle_datalake = bool
+      raw_container_prefix_archive = list(string)
+      raw_container_prefix_delete = list(string)
+      refined_container_prefix_cool = list(string)
+      days_after_to_archive_raw_data = number
+      days_after_to_delete_raw_data = number
+      days_after_to_cool_refined_data = number
     }
   )
 }
