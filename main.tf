@@ -55,6 +55,13 @@ resource "azurerm_storage_data_lake_gen2_filesystem" "gen2_datalake_containers" 
   }
 }
 
+resource "azurerm_storage_data_lake_gen2_path" "product_container_path_create" {
+  path               = var.datalake_resource_config["product_container_path_create"]
+  filesystem_name    = "product"
+  storage_account_id = azurerm_storage_account.gen2_datalake.id
+  resource           = "directory"
+}
+
 resource "azurerm_storage_management_policy" "data_lifecycle_datalake" {
   storage_account_id = azurerm_storage_account.gen2_datalake.id
 
@@ -73,15 +80,15 @@ resource "azurerm_storage_management_policy" "data_lifecycle_datalake" {
   }
 
   rule {
-    name    = "delete-raw-data-lifecycle-datalake"
-    enabled = var.datalake_resource_config["enable_delete_raw_data_lifecycle_datalake"]
+    name    = "delete-product-data-lifecycle-datalake"
+    enabled = var.datalake_resource_config["enable_delete_product_data_lifecycle_datalake"]
     filters {
-      prefix_match = var.datalake_resource_config["raw_container_prefix_delete"]
+      prefix_match = var.datalake_resource_config["product_container_prefix_delete"]
       blob_types   = ["blockBlob"]
     }
     actions {
       base_blob {
-        delete_after_days_since_modification_greater_than = var.datalake_resource_config["days_after_to_delete_raw_data"]
+        delete_after_days_since_modification_greater_than = var.datalake_resource_config["days_after_to_delete_product_data"]
       }
     }
   }
